@@ -1,10 +1,36 @@
-from django.core.management import BaseCommand
+import json
+import os
+from django.conf import settings
+from django.core.management import BaseCommand, CommandError
 
 
 class Command(BaseCommand):
 
-    def handle(self):
+    def add_arguments(self, parser):
+        parser.add_argument('theme_name', nargs='?', type=str)
+
+    def handle(self, *args, **options):
         """
-        Select a different installed theme.
+        Installs a theme via pip and selects it.
         """
-        pass
+
+        # Select it
+        old_conf = settings.THEME_CONFIG
+
+        # Make sure it is installed
+        if not options['theme_name'] in old_conf['installed']:
+            raise CommandError(
+                "Theme {theme} does not appear to be installed.  \n"
+                "Theme options include: \n{valid_themes}".format(
+                    theme=options['theme_name'],
+                    valid_themes="\n".join(["  - " + n for n in old_conf['installed']])
+                )
+            )
+        new_conf = old_conf.copy()
+
+        # Activate the theme
+        new_conf['active'] = options['theme_name']
+
+        # Write the new configuration
+        with open(os.path.join(settings.BASE_DIR, '.bl-theme'), 'w') as theme_conf:
+            theme_conf.write(json.dumps(new_conf))

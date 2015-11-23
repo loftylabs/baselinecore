@@ -1,4 +1,6 @@
+import os
 import subprocess
+import sys
 
 from django.core.management import BaseCommand
 from django.conf import settings
@@ -7,11 +9,14 @@ from django.conf import settings
 class Command(BaseCommand):
 
     def add_arguments(self, parser):
-        parser.add_argument('git_url', nargs='+', type=str)
-0
+        parser.add_argument('git_url', nargs='?', type=str)
+
+
     def handle(self, *args, **options):
         """
         Installs a package via pip.  To be used by higher level commands for themes and plugins
         """
-        subprocess.call("pip install -e {url}".format(url=options['git_url']))
+        subprocess.Popen([
+            "pip", "install",  "-e", str(options['git_url'])
+        ], env=os.environ.copy()).wait()
 
