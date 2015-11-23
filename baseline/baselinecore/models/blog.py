@@ -12,7 +12,6 @@ from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsearch import index
 
 
-
 class BlogPageTag(TaggedItemBase):
     content_object = ParentalKey('baselinecore.BlogPage', related_name='tagged_items')
 
