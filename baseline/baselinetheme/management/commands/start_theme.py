@@ -1,12 +1,12 @@
 from django.core.management import BaseCommand
 
 
-DEFAULT_THEME = 'baseline.theme.baseline2015'
+DEFAULT_THEME = 'baseline.baselinetheme.baseline2015'
 
 class Command(BaseCommand):
 
     def handle(self):
         """
-        Start a new theme based on the default theme package.
+        Start a new baselinetheme based on the default baselinetheme package.
         """
         pass

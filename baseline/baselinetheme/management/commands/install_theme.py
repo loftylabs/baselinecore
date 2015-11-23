@@ -25,11 +25,11 @@ class Command(BaseCommand):
         old_conf = settings.THEME_CONFIG
         new_conf = old_conf.copy()
 
-        # Add the new theme (unless it was there already)
+        # Add the new baselinetheme (unless it was there already)
         if package_name not in new_conf['installed']:
             new_conf['installed'].append(package_name)
 
-        # Activate the theme
+        # Activate the baselinetheme
         new_conf['active'] = package_name
 
         # Write the new configuration

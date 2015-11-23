@@ -11,7 +11,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         """
-        Installs a theme via pip and selects it.
+        Installs a baselinetheme via pip and selects it.
         """
 
         # Select it
