@@ -1,0 +1,33 @@
+{% extends "blog/blog_base.html" %}
+
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% block body_class %}template-blogindexpage{% endblock %}
+
+{% block blog-content %}
+<div class="col-md-8 col-md-offset-2">
+{% for post in self.blog_posts %}
+    <div class="blog-post-section">
+        <div class="blog-post-img">
+            {% image post.primary_image width-730 as primary_image %}
+            <a href="{{ post.url }}"><img src="{{ primary_image.url }}" class="img-responsive" alt=""></a>
+        </div>
+        <div class="blog-post-header">
+            <h3><a href="{{ post.url }}" class="hover-color">{{ post.title }}</a><br><small>
+                {{ post.snippet }}
+            </small></h3>
+        </div>
+        <div class="blog-post-info">
+            <span><a href="#" class="hover-color">by Casey Kinsey</a> | {{ post.datetime}}</span>
+        </div>
+        <div class="blog-post-detail">
+            {{ post.body|safe|truncatewords_html:90 }}
+        </div>
+        <div class="blog-post-more text-right">
+            <a href="{{ post.url }}" class="btn theme-btn-default btn-lg">continue reading</a>
+        </div>
+    </div><!--blog post section end-->
+{% endfor %}
+</div>
+
+{% endblock %}

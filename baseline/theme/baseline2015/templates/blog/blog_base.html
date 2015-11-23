@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags static %}
+
+{% block body_class %}templage-blogindex{% endblock %}
+
+{% block content %}
+    {% block blog-pre-content %}
+    <section id="content-region-3" class="padding-40 page-tree-bg">
+        <div class="container">
+            <h3 class="page-tree-text">
+                {{ self.title }}
+                {% if self.snippet %}<br><small>{{ self.snippet }}</small>{% endif %}
+            </h3>
+        </div>
+    </section><!--page-tree end here-->
+    {% endblock %}
+    <div class="space-70"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                {% block blog-content %}{% endblock %}
+            </div>
+        </div>
+
+    </div><!--blog post page content end here-->
+
+<div class="space-70"></div>
+{% endblock %}

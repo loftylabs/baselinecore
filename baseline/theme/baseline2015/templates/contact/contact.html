@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% load static %}
+
+{% block content %}
+        <section id="content-region-3" class="padding-40 page-tree-bg">
+            <div class="container">
+                <h3 class="page-tree-text">
+                    Contact us
+                </h3>
+            </div>
+        </section><!--page-tree end here-->
+        <!--google map-->
+        <div id="map-canvas"></div>
+        <!--google map end-->
+        <div class="space-70"></div>
+        <div class="container">
+            <div class="col-md-5">
+                <h4 class="heading-mini">We’d Love to Hear From You</h4>
+                <p>1 E Center St</p>
+                <p>Suite #320-C</p>
+                <p>Fayetteville, Arkansas 72701</p>
+                <p>Phone: (479) 718-6160</p>
+                <p>Email: <a href="mailto:hello@hirelofty.com">hello@hirelofty.com</a></p>
+            </div>
+            <div class="col-md-6 col-md-offset-1">
+                <h4 class="heading-mini">Contact us</h4>
+                <div class="my-contact-form">
+                    <form name="sentMessage" id="contactForm" method="post" novalidate action="{% url 'contact-us' %}">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row control-group">
+                                    <div class="form-group col-xs-12 controls">
+                                        <input type="text" class="form-control" placeholder="Name*" id="name" name="name" required data-validation-required-message="Please enter your name." value="{% if form.name.value %}{{ form.name.value }}{% endif %}">
+                                        {% if form.name.errors %}
+                                            <span class="text-danger">{{form.name.errors}}</span>
+                                        {% endif %}
+                                        <p class="help-block"></p>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="row control-group">
+                                    <div class="form-group col-xs-12 controls">
+                                        <input type="email" class="form-control" placeholder="Email Address*" id="email" name="email" required data-validation-required-message="Please enter your email address." value="{% if form.email.value %}{{ form.email.value }}{% endif %}">
+                                        {% if form.email.errors %}
+                                            <span class="text-danger">{{form.email.errors}}</span>
+                                        {% endif %}
+                                        <p class="help-block"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row control-group">
+                            <div class="form-group col-xs-12">
+                                <input type="text" class="form-control" placeholder="Organization" name="organization" id="phone" value="{% if form.organization.value %}{{ form.organization.value }}{% endif %}">
+                                {% if form.organization.errors %}
+                                    <span class="text-danger">{{form.organization.errors}}</span>
+                                {% endif %}
+                                <p class="help-block"></p>
+                            </div>
+                        </div>
+                        <div class="row control-group">
+                            <div class="form-group col-xs-12 controls">
+                                <textarea rows="5" class="form-control" placeholder="How can we help?" id="message" name="body" required data-validation-required-message="Please enter a message.">{% if form.body.value %}{{ form.body.value }}{% endif %}</textarea>
+                                {% if form.body.errors %}
+                                    <span class="text-danger">{{form.body.errors}}</span>
+                                {% endif %}
+                                <p class="help-block"></p>
+                            </div>
+                        </div>
+                        <br>
+                        <div id="success"></div>
+                        <div class="row">
+                            <div class="form-group col-xs-12 text-right" style="margin-top: -15px;">
+                                <button type="submit" class="btn theme-btn-color btn-lg">Get in Touch</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div><!--contact page end-->
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript">
+            var myLatlng;
+            var map;
+            var marker;
+
+            function initialize() {
+                myLatlng = new google.maps.LatLng(36.062259, -94.159359);
+
+
+                var mapOptions = {
+                    zoom: 17,
+                    center: myLatlng,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    scrollwheel: false,
+                    draggable: false
+                };
+                map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+                var contentString = '<p style="line-height: 20px;"><strong>Banzhow Template</strong></p><p>123 My Street, Banzhow City, CA 4567</p>';
+
+                var infowindow = new google.maps.InfoWindow({
+                    content: contentString
+                });
+
+                marker = new google.maps.Marker({
+                    position: myLatlng,
+                    map: map,
+                    title: 'Marker'
+                });
+
+                google.maps.event.addListener(marker, 'click', function() {
+                    infowindow.open(map, marker);
+                });
+            }
+
+            google.maps.event.addDomListener(window, 'load', initialize);
+        </script>
+{% endblock %}

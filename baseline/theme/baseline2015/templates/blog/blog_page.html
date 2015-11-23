@@ -1,0 +1,53 @@
+{% extends "blog/blog_base.html" %}
+
+{% load wagtailcore_tags wagtailimages_tags static %}
+
+{% block body_class %}template-blogpage{% endblock %}
+
+
+
+{% block blog-pre-content %}
+    <section id="content-region-3" class="padding-40 blog-bg">
+        <div class="container">
+            <h1 class="blog-header">
+                {{ self.title }}
+                {% if self.snippet %}<br><small>{{ self.snippet }}</small>{% endif %}
+            </h1>
+        </div>
+    </section><!--page-tree end here-->
+{% endblock %}
+
+
+{% block blog-content %}
+<div class="col-md-10 col-md-offset-1">
+        <div class="blog-post-info text-left">
+            <span>by Casey Kinsey</a> | on {{ self.datetime}} </span>
+        </div>
+        <div class="blog-post-detail">
+            {{ self.body|safe }}
+        </div>
+
+</div>
+<div class="space-70"></div>
+{% endblock %}
+
+{% block extra_js %}
+
+    <script>
+
+        {% if self.primary_image %}
+            {% image self.primary_image width-1920 as primary_image %}
+            var image_url = 'url({{ primary_image.url }})';
+        {% else %}
+            var image_url = 'url({% static "bizwrap/assets/img/bread-bg-loftyblue.png" %})';
+        {% endif %}
+
+        $().ready(function(){
+            $(".blog-bg").css('background-image', image_url);
+        });
+
+        $('.blog-bg').parallax("10%", 0.2);
+    </script>
+
+
+{% endblock %}
