@@ -5,18 +5,23 @@ from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
 
 from wagtail.wagtailcore import blocks
-from wagtail.wagtailcore.models import Page, Orderable
+from wagtail.wagtailcore.models import Page
 from wagtail.wagtailcore.fields import RichTextField, StreamField
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from wagtail.wagtailsearch import index
 
+from baseline.baselinecore.models import BaselinePage
 
 class BlogPageTag(TaggedItemBase):
     content_object = ParentalKey('baselinecore.BlogPage', related_name='tagged_items')
 
 
 class BlogPage(Page):
+
+    class Meta:
+        verbose_name = "Blog Post"
+
     datetime = models.DateTimeField("Post Date/Time")
     snippet = models.CharField(max_length=250)
     primary_image =  models.ForeignKey(
@@ -49,54 +54,15 @@ class BlogPage(Page):
     ]
 
 
-class LinkFields(models.Model):
-    link_external = models.URLField("External link", blank=True)
-    link_page = models.ForeignKey(
-        'wagtailcore.Page',
-        null=True,
-        blank=True,
-        related_name='+'
-    )
-
-    @property
-    def link(self):
-        if self.link_page:
-            return self.link_page.url
-        else:
-            return self.link_external
-
-    panels = [
-        FieldPanel('link_external'),
-        PageChooserPanel('link_page'),
-    ]
+class BlogIndexPage(BaselinePage):
 
     class Meta:
-        abstract = True
+        verbose_name = "Blog Index"
 
-
-# Related links
-class RelatedLink(LinkFields):
-    title = models.CharField(max_length=255, help_text="Link title")
-
-    panels = [
-        FieldPanel('title'),
-        MultiFieldPanel(LinkFields.panels, "Link"),
-    ]
-
-    class Meta:
-        abstract = True
-
-
-class BlogIndexRelatedLink(Orderable, RelatedLink):
-    page = ParentalKey('BlogIndexPage', related_name='related_links')
-
-
-class BlogIndexPage(Page):
     intro = RichTextField(blank=True)
 
     content_panels = Page.content_panels + [
         FieldPanel('intro', classname="full"),
-        InlinePanel('related_links', label="Related links"),
     ]
 
     @property

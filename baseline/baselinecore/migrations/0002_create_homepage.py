@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
@@ -38,7 +37,7 @@ def create_homepage(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('baselinecore', '0002_homepage'),
+        ('baselinecore', '0001_initial'),
     ]
 
     operations = [
