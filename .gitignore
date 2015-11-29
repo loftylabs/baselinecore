@@ -55,3 +55,7 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Development Environment / OS
+.DS_Store
+.idea
