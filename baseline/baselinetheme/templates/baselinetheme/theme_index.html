@@ -1,4 +1,4 @@
-{% extends "wagtailadmin/base.html" %}
+{% extends "baselinecore/admin_base.html" %}
 {% load wagtailimages_tags i18n %}
 
 {% block titletag %}{% trans "Themes" %}{% endblock %}
@@ -16,9 +16,13 @@
             <ul class="listing horiz images">
             {% for theme in installed_themes %}
                 <li>
-                    <a class="image-choice" href="{% url 'baseline-theme-activate'%}?theme={{ theme }}">
-                        <div class="image"><img src="https://placehold.it/165/165"></div>
-                        <h3>{% if theme == active_theme %}<strong>[active]</strong>{% endif %} {{ theme }}</h3>
+                    <a class="theme-choice{% if theme.package == active_theme %} active{% endif %}"
+                       href="{% url 'baseline-theme-activate'%}?theme={{ theme.package }}">
+                        <div class="image">
+                            <img src="{% url 'baseline-theme-thumb' %}?theme={{ theme.package }}">
+                        </div>
+                        <h3>{{ theme.meta.title }}</h3>
+                        <p>{{ theme.meta.description }}</p>
                     </a>
                 </li>
             {% endfor %}
