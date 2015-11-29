@@ -1,0 +1,29 @@
+{% extends "wagtailadmin/base.html" %}
+{% load wagtailimages_tags i18n %}
+
+{% block titletag %}{% trans "Themes" %}{% endblock %}
+{% block extra_js %}
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    {% trans "Themes" as im_str %}
+    {% include "wagtailadmin/shared/header.html" with title=im_str add_link="baseline-theme-index" icon="edit" add_text="Add Theme" %}
+
+    <div class="nice-padding">
+        <div id="theme-results">
+            <h2>Installed Themes</h2>
+            <ul class="listing horiz images">
+            {% for theme in installed_themes %}
+                <li>
+                    <a class="image-choice" href="{% url 'baseline-theme-activate'%}?theme={{ theme }}">
+                        <div class="image"><img src="https://placehold.it/165/165"></div>
+                        <h3>{% if theme == active_theme %}<strong>[active]</strong>{% endif %} {{ theme }}</h3>
+                    </a>
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+    
+{% endblock %}
