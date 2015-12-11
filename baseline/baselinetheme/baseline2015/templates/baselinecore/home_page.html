@@ -1,5 +1,33 @@
 {% extends "base.html" %}
+{% load static baseline_blog %}
 
 {% block content %}
-This is the homepage!
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                {% get_latest_posts %}
+                {% for post in latest_blog_posts %}
+                    <div class="post-preview">
+                        <a href="{{ post.url }}">
+                            <h2 class="post-title">
+                                {{ post.title }}
+                            </h2>
+                            <h3 class="post-subtitle">
+                                {{ post.snippet }}
+                            </h3>
+                        </a>
+                        <p class="post-meta">Posted by <a href="#">Start Bootstrap</a> on September 24, 2014</p>
+                    </div>
+                {% endfor %}
+                <hr>
+                <!-- Pager -->
+                <ul class="pager">
+                    <li class="next">
+                        <a href="#">Older Posts &rarr;</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 {% endblock %}
