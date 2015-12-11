@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 from modelcluster.fields import ParentalKey
@@ -22,6 +23,10 @@ class BlogPage(Page):
     class Meta:
         verbose_name = "Blog Post"
 
+    # TODO:  Probably make this non-nullable in the production version
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
+                               on_delete=models.SET_NULL)
+
     datetime = models.DateTimeField("Post Date/Time")
     snippet = models.CharField(max_length=250)
     primary_image =  models.ForeignKey(
@@ -43,8 +48,9 @@ class BlogPage(Page):
     )
 
     content_panels = Page.content_panels + [
-        FieldPanel('datetime'),
         FieldPanel('snippet'),
+        FieldPanel('datetime'),
+        FieldPanel('author'),
         ImageChooserPanel('primary_image'),
         StreamFieldPanel('body'),
     ]
@@ -52,6 +58,18 @@ class BlogPage(Page):
     promote_panels = Page.promote_panels + [
         FieldPanel('tags'),
     ]
+
+    @property
+    def author_name(self):
+        """
+        Default to username if no first/last name are provided
+        """
+        if self.author:
+
+            if self.author.get_full_name() != "":
+                return self.author.get_full_name()
+            else:
+                return self.author.username
 
 
 class BlogIndexPage(BaselinePage):

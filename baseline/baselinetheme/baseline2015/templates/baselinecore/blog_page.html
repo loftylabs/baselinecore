@@ -2,12 +2,26 @@
 
 {% load wagtailcore_tags wagtailimages_tags static %}
 
-{% block body_class %}template-blogpage{% endblock %}
 
-{% if self.primary_image %}
-    {% block lead_image %}{% image self.primary_image width-1920 as primary_image %}{{ primary_image.url }}{% endblock %}
-{% endif %}
-{% block post_time %}<span class="meta">Posted by <a href="#">Baseline</a> on {{ self.datetime }}</span>{% endblock %}
+
+{% block pre-content %}
+    {% image self.primary_image width-1920 as primary_image %}
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    <header class="intro-header" style="background-image: url('{% if primary_image.url %}{{ primary_image.url }}{% else %}{% static 'img/home-bg.jpg' %}{% endif %}');">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1>{{ self.title }}</h1>
+                        <span class="subheading">{{ self.snippet }}</span>
+                        <span class="meta">Posted by {{ self.author_name }} on {{ self.datetime }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
 
 {% block content %}
     <article>

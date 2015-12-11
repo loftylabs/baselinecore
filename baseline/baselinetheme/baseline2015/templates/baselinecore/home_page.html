@@ -6,6 +6,15 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                {{ self.body|safe }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Latest Posts -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 {% get_latest_posts %}
                 {% for post in latest_blog_posts %}
                     <div class="post-preview">
@@ -18,9 +27,9 @@
                             </h3>
                         </a>
                         <p class="post-meta">Posted by <a href="#">Start Bootstrap</a> on September 24, 2014</p>
-                    </div>
+                    </div><hr>
                 {% endfor %}
-                <hr>
+
                 <!-- Pager -->
                 <ul class="pager">
                     <li class="next">
