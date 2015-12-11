@@ -10,6 +10,8 @@ class HomePage(BaselinePage):
     Homepage specific configuration
     """
 
+    template = "index.html"
+
     snippet = models.CharField(max_length=2502, default="Welcome to Baseline!")
 
     content_panels = BaselinePage.content_panels + [

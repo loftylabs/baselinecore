@@ -28,4 +28,5 @@ class BaselinePage(Page):
 
 
 class StaticPage(BaselinePage):
-    pass
+
+    template = "page.html"

@@ -20,6 +20,8 @@ class BlogPageTag(TaggedItemBase):
 
 class BlogPage(Page):
 
+    template = 'blog/post.html'
+
     class Meta:
         verbose_name = "Blog Post"
 
@@ -73,6 +75,8 @@ class BlogPage(Page):
 
 
 class BlogIndexPage(BaselinePage):
+
+    template = 'blog/index.html'
 
     class Meta:
         verbose_name = "Blog Index"
