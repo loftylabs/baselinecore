@@ -31,7 +31,12 @@
                     {{ self.body|safe }}
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    {% block post_footer %}{% endblock %}
+                </div>
+            </div>
         </div>
     </article>
-
 {% endblock %}

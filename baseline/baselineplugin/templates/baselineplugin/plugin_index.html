@@ -1,0 +1,57 @@
+{% extends "baselinecore/admin_base.html" %}
+{% load wagtailimages_tags i18n %}
+
+{% block titletag %}{% trans "Plugins" %}{% endblock %}
+{% block extra_js %}
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    {% trans "Plugins" as im_str %}
+    {% include "wagtailadmin/shared/header.html" with title=im_str add_link="baseline-plugin-index" icon="edit" add_text="Add Plugin" %}
+
+
+    <div class="nice-padding">
+        <div id="plugin-results" class="plugins">
+            <table class="listing">
+                <thead>
+                    <tr>
+                        <th class="name">
+                            Name
+                        </th>
+                        <th class="description">
+                            Description
+                        </th>
+                        <th class="status">Status</th>
+                        <th class="action">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for plugin in installed_plugins %}
+                    <tr>
+                        <td class="name">
+                            <h2>{{ plugin.meta.title }}</h2>
+                        </td>
+                        <td class="description">{{ plugin.meta.description }}</td>
+                        <td class="status">
+                            {% if plugin.is_active %}
+                                Active
+                            {% else %}
+                                Inactive
+                            {% endif %}
+                        </td>
+                        <td class="action">
+                            {% if plugin.is_active %}
+                                <a href="{% url 'baseline-plugin-deactivate' %}?plugin={{ plugin.package }}" class="button button-small button-secondary">Deactivate</a>
+                            {% else %}
+                                <a href="{% url 'baseline-plugin-activate' %}?plugin={{ plugin.package }}"  class="button button-small button-primary">Activate</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
