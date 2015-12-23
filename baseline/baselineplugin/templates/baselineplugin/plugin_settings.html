@@ -1,0 +1,24 @@
+{% extends "baselinecore/admin_base.html" %}
+{% load wagtailimages_tags i18n %}
+
+{% block titletag %}{% trans "Plugins" %}{% endblock %}
+{% block extra_js %}
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    {% trans "Plugins" as im_str %}
+    {% include "wagtailadmin/shared/header.html" with title=im_str add_link="baseline-plugin-index" icon="edit" add_text="Add Plugin" %}
+
+
+    <div class="nice-padding">
+        <div id="plugin-results" class="plugins">
+            <form class="plugin-settings-form" method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Update Settings">
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

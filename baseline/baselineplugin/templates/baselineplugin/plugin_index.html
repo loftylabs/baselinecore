@@ -43,6 +43,7 @@
                         <td class="action">
                             {% if plugin.is_active %}
                                 <a href="{% url 'baseline-plugin-deactivate' %}?plugin={{ plugin.package }}" class="button button-small button-secondary">Deactivate</a>
+                                <a href="{% url 'baseline-plugin-settings' plugin.package %}" class="button button-small button-secondary">settings</a>
                             {% else %}
                                 <a href="{% url 'baseline-plugin-activate' %}?plugin={{ plugin.package }}"  class="button button-small button-primary">Activate</a>
                             {% endif %}

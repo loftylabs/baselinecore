@@ -1,12 +1,8 @@
-import os
-import urllib
-
 from django.conf import settings
 from django.contrib import messages
 from django.core.management import call_command, CommandError
 from django.core.urlresolvers import reverse
-from django.http import FileResponse
-from django.views.generic import TemplateView, RedirectView, View
+from django.views.generic import TemplateView, RedirectView, FormView
 
 from .utils import get_installed_plugins, get_plugin_pkg_meta
 
@@ -29,6 +25,36 @@ class PluginIndex(TemplateView):
         })
 
         return super(PluginIndex, self).get_context_data(**kwargs)
+
+
+class PluginSettings(FormView):
+    """
+    Admin view to edit the settings defined by a plugin
+    """
+    template_name = "baselineplugin/plugin_settings.html"
+
+    def get_success_url(self):
+        return reverse('baseline-plugin-settings', args=[self.plugin_package])
+
+    def get_initial(self):
+        """
+        Pre-populate the form with the current settings
+        """
+        settings = self.request.plugin_settings.get(self.plugin_package, dict())
+        return settings
+
+    def dispatch(self, request, *args, **kwargs):
+        self.plugin_package = args[0]
+        plugin_mod = get_plugin_pkg_meta(self.plugin_package)
+
+        self.form_class = plugin_mod.plugin.settings_form_class
+        return super(PluginSettings, self).dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        # Save the settings
+        form.save()
+        messages.success(self.request, "Settings updated successfully.")
+        return super(PluginSettings, self).form_valid(form)
 
 
 class ActivatePlugin(RedirectView):
