@@ -34,5 +34,5 @@ setup(
     keywords='cms blog blogging platform website builder',
 
     packages=find_packages(exclude=['tests*']),
-    install_requires=[]
+    install_requires=['requests==2.9.1']
 )

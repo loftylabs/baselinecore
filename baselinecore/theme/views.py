@@ -1,13 +1,69 @@
 import os
+import requests
 
 from django.conf import settings
 from django.contrib import messages
 from django.core.management import call_command, CommandError
 from django.core.urlresolvers import reverse
 from django.http import FileResponse
-from django.views.generic import TemplateView, RedirectView, View
+from django.views.generic import TemplateView, RedirectView, View, FormView
 
+from .forms import InstallThemeForm
 from .utils import get_installed_themes, get_theme_pkg_meta
+
+
+MARKETPLACE_API_URL = 'http://market.getbaseline.io/api'
+
+
+class InstallTheme(FormView):
+    """
+    Admin view to allow new plugins to be installed via the MarketPlace
+    """
+    template_name = "baselinecore/theme/install.html"
+    form_class = InstallThemeForm
+
+    def get_success_url(self, *args, **kwargs):
+        """
+        Direct back to the plugin page
+        """
+        return reverse('wagtailadmin_home')
+
+    def get_context_data(self, **kwargs):
+
+        kwargs.update({
+            'installed_themes': get_installed_themes(),
+        })
+
+        # query the marketplace to get a list of plugins
+        marketplace_plugins = requests.get("{0}/themes/".format(MARKETPLACE_API_URL)).json()
+        kwargs['results'] = marketplace_plugins
+        return super(InstallTheme, self).get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        """
+        Install the plugin
+        """
+
+        theme_id = form.cleaned_data['theme_id']
+        plugin_data = requests.get("{0}/themes/{1}/".format(MARKETPLACE_API_URL,
+                                                             theme_id)).json()
+
+        # Github
+        if plugin_data['package_type'] == 1:
+            try:
+                call_command('install_theme',
+                             "git+{0}#egg={1}".format(
+                                 plugin_data['repo_url'], plugin_data['package_name']),
+                             plugin_data['package_name'])
+                messages.success(self.request, "Plugin {plugin} was activated successfully.".format(
+                    plugin=plugin_data['title']))
+            except CommandError:
+                messages.error(self.request, "There was an error activating {plugin}.".format(
+                    plugin=plugin_data['title']))
+        else:
+            raise NotImplementedError("Distutil Packages are currently unsupported.")
+
+        return super(InstallTheme, self).form_valid(form)
 
 class ThemeIndex(TemplateView):
     """

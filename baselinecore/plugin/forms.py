@@ -19,3 +19,8 @@ class BasePluginSettingsForm(forms.Form):
         plugin_settings, _ = PluginSettings.objects.get_or_create(plugin=self.plugin)
         plugin_settings.set_from_dict(self.cleaned_data)
         plugin_settings.save()
+
+
+class InstallPluginForm(forms.Form):
+
+    plugin_id = forms.UUIDField()

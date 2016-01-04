@@ -1,0 +1,34 @@
+{% extends "baselinecore/admin_base.html" %}
+{% load wagtailimages_tags i18n %}
+
+{% block titletag %}{% trans "Plugins" %}{% endblock %}
+{% block extra_js %}
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    {% trans "Add Plugin" as im_str %}
+    {% include "wagtailadmin/shared/header.html" with title=im_str add_link="baseline-plugin-install" icon="edit" add_text="Add Plugin" %}
+
+
+    <div class="nice-padding">
+        <div id="plugin-results" class="plugins">
+            <h1>Via Marketplace</h1>
+
+            <ul>
+            {% for plugin in results %}
+                <li>
+                    <h2>{{ plugin.title}}</h2>
+                    <p>{{ plugin.url }}</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="plugin_id" value="{{ plugin.id }}">
+                        <input type="submit" class="button" value="Install">
+                    </form>
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}
